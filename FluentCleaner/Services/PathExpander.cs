@@ -75,13 +75,12 @@ public class PathExpander
         ResolveRecursive(ExpandVariables(rawPath), results);
 
         // If the path references %ProgramFiles%, also try %ProgramFiles(x86)%.
-        // Use a HashSet to avoid duplicate results when both point to the same dir (32-bit OS).
+        // HashSet prevents duplicates when both point to the same dir (32-bit OS).
         if (rawPath.Contains("%ProgramFiles%", StringComparison.OrdinalIgnoreCase))
         {
             var x86Path = rawPath.Replace("%ProgramFiles%", "%ProgramFiles(x86)%",
                                           StringComparison.OrdinalIgnoreCase);
-            var expanded = ExpandVariables(x86Path);
-            ResolveRecursive(expanded, results);
+            ResolveRecursive(ExpandVariables(x86Path), results);
         }
         return results.ToList();
     }
